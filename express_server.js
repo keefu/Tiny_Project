@@ -22,9 +22,6 @@ app.get("/urls.json", (req, res) => {
 //  res.render("../views/urls_index.ejs")
 //})
 
-
-
-
 app.get("/urls", (req, res) => {
 
   const keys = Object.keys(urlDatabase);
@@ -33,20 +30,21 @@ app.get("/urls", (req, res) => {
     urls: urlDatabase,
     keys: keys
   };
+  console.log(templateVars);
 
   res.render("urls_index", templateVars);
 });
 
-
-
-
-
-
+app.get("/urls/:shortURL", (req, res) => {
+let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
+res.render("urls_show", templateVars);
+});
 
 app.get("/hello", (req, res) => {
   let templateVars = { greeting: 'Hello World!' };
   res.render("hello_world", templateVars);
 });
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });

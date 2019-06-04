@@ -17,14 +17,32 @@ app.get("/urls.json", (req, res) => {
 });
 //app.get("/hello", (req, res) => {
 //  res.send("<html><body>Hello <b>World</b></body></html>\n");
-//});
+// });
 //app.get("/urls", (req, res) => {
 //  res.render("../views/urls_index.ejs")
 //})
-//app.get("/urls", (req, res) => {
-//  let templateVars = { urls: urlDatabase };
-//  res.render("urls_index", templateVars);
-//});
+
+
+
+
+app.get("/urls", (req, res) => {
+
+  const keys = Object.keys(urlDatabase);
+
+  const templateVars = {
+    urls: urlDatabase,
+    keys: keys
+  };
+
+  res.render("urls_index", templateVars);
+});
+
+
+
+
+
+
+
 app.get("/hello", (req, res) => {
   let templateVars = { greeting: 'Hello World!' };
   res.render("hello_world", templateVars);

@@ -11,7 +11,15 @@
 <body style="font-size:20px; padding:50px;">
 <% include partials/_header.ejs %>
  <a href="<%= '/urls/new' %>">Create new TinyUrl</a>
-  <p><%= shortURL %></p>
-  <p><%= longURL %></p>
+  <h2><p>ShortURL: <%= shortURL %></p></h2>
+    <form action="/urls" method="POST">
+      <div class="form-group mb-2">
+        <label for="longURL"><p><%= longURL %></p></label>
+        <input class="form-control" type="text" name="longURL" placeholder="http://<%= longURL %>" style="width: 300px; margin: 1em">
+        <button type="submit" class="btn btn-primary">Update</button>
+      </div>
+      <a href="<%= '/urls' %>">Back</a>
+    </form>
+
 </body>
 </html>

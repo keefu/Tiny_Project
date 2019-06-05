@@ -1,6 +1,11 @@
 var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
+app.set("view engine", "ejs");
 
 function generateRandomString(length) {
    var result = '';
@@ -11,11 +16,6 @@ function generateRandomString(length) {
    }
    return result;
 }
-
-const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({extended: true}));
-
-app.set("view engine", "ejs");
 
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -39,22 +39,25 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls", (req, res) => {
   const keys = Object.keys(urlDatabase);
   const templateVars = {
+    username: req.cookies["username"],
     urls: urlDatabase,
     keys: keys
   };
   console.log(templateVars);
-
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
-console.log(req)
+let templateVars = { username: req.cookies["username"],
+shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
+console.log(templateVars);
 res.render("urls_show", templateVars);
 });
 
+
 app.get("/hello", (req, res) => {
-  let templateVars = { greeting: 'Hello World!' };
+  let templateVars = { greeting: 'Hello World!', username: req.cookies["username"]
+ };
   res.render("hello_world", templateVars);
 });
 

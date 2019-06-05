@@ -9,13 +9,16 @@
 <title>TinyApp</title>
 <body style="font-size:20px; padding:50px;">
   <% include partials/_header.ejs %>
-  <a href="<%= '/urls/new' %>">Create new TinyUrl</a>
+  <br>
+  <br>
+  <a href="<%= '/urls/new' %>"><h3>Create new TinyUrl</h3></a> <br>
+
   <% keys.forEach(function(key) { %>
       <li>
         <span><%= key %> - <%= urls[key] %></span>
           <form method="POST" action="/urls/<%= key %>/delete">
+              <a href="/urls/<%= key %>">Edit</a>
   <button type="delete" class="btn btn-primary">Delete</button>
-  <a href="/urls/<%= key %>">Edit</a>
   </form>
         </li>
   <% }); %>

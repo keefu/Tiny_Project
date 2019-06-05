@@ -31,12 +31,7 @@ app.get("/u/:shortURL", (req, res) => {
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
-//app.get("/hello", (req, res) => {
-//  res.send("<html><body>Hello <b>World</b></body></html>\n");
-// });
-//app.get("/urls", (req, res) => {
-//  res.render("../views/urls_news.ejs")
-//})
+
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
@@ -64,10 +59,7 @@ app.get("/hello", (req, res) => {
 app.post("/urls", (req, res) => {
   let short = generateRandomString(6);
   let long = req.body.longURL;
-  console.log(short);
-  console.log(long);
   urlDatabase[short] = long;
-  console.log(urlDatabase);
   res.redirect(`urls/${short}`)
 });
 

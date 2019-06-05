@@ -4,7 +4,7 @@ var PORT = 8080; // default port 8080
 
 function generateRandomString(length) {
    var result = '';
-   var characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+   var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
    var charactersLength = characters.length;
    for ( var i = 0; i < length; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -66,10 +66,15 @@ app.post("/urls", (req, res) => {
   let short = generateRandomString(6);
   let long = req.body.longURL;
   urlDatabase[short] = long;
-  res.redirect(`urls/${short}`);
+  res.redirect("/urls");
 });
 app.post("/urls/:shortURL/delete", (req, res) => {
   delete urlDatabase[req.params.shortURL];
+  res.redirect("/urls");
+})
+
+app.post("/login", (req, res) => {
+  res.cookie('username', req.body.username);
   res.redirect("/urls");
 })
 

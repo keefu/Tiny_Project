@@ -1,13 +1,14 @@
-<% if(username) {%>
-<h1><header>TinyApp</header></h1>
-  <form method = "POST" action = "/logout" >
-    <button type="submit" class= "btn btn-primary">Logout</button>
-    <b><p>Logged In As: <%= username%>!</p></b>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>TinyApp</title>
+<h1>TinyApp</h1>
+</head>
+<body style="font-size:20px; padding:50px;">
+  <form method="POST" action="/login">
+  <a href="/login">Login</a>
+  |
+  <a href="/register">Register</a>
   </form>
-<% } else { %>
-<h1><header>TinyApp</header></h1>
-  <form method = "POST" action = "/login" >
-    <input class="form-control" type="text" name="username" placeholder="username" style="width: 300px; margin: 1em">
-    <button type="submit" class= "btn btn-primary">Login</button>
-  </form>
-<% } %>
+</body>
+</html>

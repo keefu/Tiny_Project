@@ -54,6 +54,14 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
+app.get("/header", (req, res)=> {
+  res.render("_header")
+})
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
 app.get("/urls", (req, res) => {
   const keys = Object.keys(urlDatabase);
   const templateVars = {

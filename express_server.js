@@ -61,6 +61,10 @@ app.get("/hello", (req, res) => {
   res.render("hello_world", templateVars);
 });
 
+app.get("/register", (req, res) => {
+  res.render("urls_reg");
+});
+
 app.post("/urls/:shortURL", (req, res) => {
   res.render("urls_index");
 });
@@ -85,6 +89,7 @@ app.post("/logout", (req, res) => {
   res.clearCookie('username');
   res.redirect("/urls");
 });
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);

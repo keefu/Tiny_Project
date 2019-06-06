@@ -84,7 +84,7 @@ app.post("/register", (req, res) => {
   const password = req.body.password;
   users[userId] = {id: userId, email: email, password: password};
   res.cookie('user_id', userId)
-  console.log(users[userId])
+  console.log(users);
   res.redirect("/urls");
 });
 

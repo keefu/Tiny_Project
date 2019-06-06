@@ -54,10 +54,6 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
-app.get("/header", (req, res)=> {
-  res.render("_header")
-})
-
 app.get("/login", (req, res) => {
   res.render("login");
 });
@@ -130,8 +126,18 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-  res.cookie('user', userId);
-  res.redirect("/urls");
+
+  const email = req.body.email;
+  const password = req.body.password;
+  const emailList = [];
+  const passList = [];
+  for (var key in users) {
+    if (users[key].email === email && users[key].password === password) {
+      res.cookie('user', users[key].id);
+      res.redirect("/urls");
+    }
+      res.status(400).send("Please provide a valid email or/and password.");
+  }
 });
 
 app.post("/logout", (req, res) => {

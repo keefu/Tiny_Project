@@ -9,7 +9,6 @@
 <title>TinyApp</title>
 <body style="font-size:20px; padding:50px;">
   <h1>TinyApp</h1>
-  <form method="POST" action="/urls/new">
   <a href="/urls">URLs</a>
   |
   <a href="<%= '/urls/new' %>">Create new TinyUrl</a>
@@ -24,7 +23,7 @@
           <form method="POST" action="/urls/<%= key %>/delete">
               <a href="/urls/<%= key %>">Edit</a>
   <button type="delete" class="btn btn-primary">Delete</button>
-  </form>
+
         </li>
   <% }); %>
 

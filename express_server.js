@@ -66,7 +66,13 @@ app.get("/urls", (req, res) => {
     keys: keys
   };
   console.log(templateVars);
-  res.render("urls_index", templateVars);
+  console.log()
+  if(req.cookies.user_id){
+    res.render("urls_index", templateVars);
+  }else{
+    res.redirect("/login")
+  }
+
 });
 
 app.get("/urls/:shortURL", (req, res) => {
@@ -126,22 +132,24 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 })
 
 app.post("/login", (req, res) => {
-
   const email = req.body.email;
   const password = req.body.password;
-  const emailList = [];
-  const passList = [];
+  let userPasswordMatch = false;
   for (var key in users) {
     if (users[key].email === email && users[key].password === password) {
-      res.cookie('user', users[key].id);
-      res.redirect("/urls");
+      userPasswordMatch = key
     }
+  }
+  if(userPasswordMatch){
+      res.cookie('user_id', key);
+      res.redirect("/urls");
+  }else{
       res.status(400).send("Please provide a valid email or/and password.");
   }
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('user');
+  res.clearCookie('user_id');
   res.redirect("/urls");
 });
 

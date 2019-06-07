@@ -1,8 +1,12 @@
 var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
+var cookieSession = require('cookie-session')
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+app.use(cookieSession({
+  name: 'session',
+  keys: [/* secret keys */]}))
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.set("view engine", "ejs");
@@ -72,7 +76,6 @@ app.get("/urls", (req, res) => {
   }else{
     res.redirect("/login")
   }
-
 });
 
 app.get("/urls/:shortURL", (req, res) => {

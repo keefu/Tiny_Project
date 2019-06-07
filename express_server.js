@@ -81,19 +81,11 @@ app.get("/login", (req, res) => {
 app.get("/urls", (req, res) => {
   const templateVars = {
     users,
-<<<<<<< HEAD
-    user: users[req.cookies["user_id"]],
-    urls: urlsForUser(req.cookies["user_id"])
-  };
-  console.log(templateVars);
-  if(users[req.cookies.user_id]){
-=======
     user: users[req.session.user_id],
     urls: urlsForUser(req.session.user_id)
   };
   console.log(templateVars);
   if(users[req.session.user_id]){
->>>>>>> feature/user-registration
     res.render("urls_index", templateVars);
   }else{
     res.redirect("/login")
@@ -101,20 +93,12 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-<<<<<<< HEAD
-  if(users[req.cookies["user_id"]].id !== urlDatabase[req.params.id].userID){
-=======
   if(users[req.session.user_id].id !== urlDatabase[req.params.id].userID){
->>>>>>> feature/user-registration
     res.redirect("/urls")
     return
   }
   let templateVars = {
-<<<<<<< HEAD
-    user: users[req.cookies["user_id"]],
-=======
     user: users[req.session.user_id],
->>>>>>> feature/user-registration
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id].longURL
   };
@@ -162,11 +146,7 @@ app.post("/urls/:shortURL", (req, res) => {
 app.post("/urls", (req, res) => {
   let short = generateRandomString(6);
   let long = req.body.longURL;
-<<<<<<< HEAD
-  urlDatabase[short] = {longURL: long, userID: req.cookies['user_id']};
-=======
   urlDatabase[short] = {longURL: long, userID: req.session.user_id};
->>>>>>> feature/user-registration
   res.redirect("/urls");
 });
 app.post("/urls/:shortURL/delete", (req, res) => {

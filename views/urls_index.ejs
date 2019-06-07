@@ -18,14 +18,6 @@
     <button type="submit" class="btn btn-primary">Logout</button>
   </form>
 <br>
-<<<<<<< HEAD
-  <% for(shortUrl in urls){ %>
-    <li>
-      <span><%= shortUrl %> - <%= urls[shortUrl].longURL %></span>
-        <a href="/urls/<%= shortUrl %>">Edit</a>
-        <form method="POST" action="/urls/<%= shortUrl %>/delete">
-        <button type="delete" class="btn btn-primary">Delete</button>
-=======
   <% Object.keys(urls).forEach(function(key) { %>
       <li>
         <span><%= key %> - <%= urls[key].longURL %></span>
@@ -33,7 +25,6 @@
               <a href="/urls/<%= key %>">Edit</a>
   <button type="delete" class="btn btn-primary">Delete</button>
 
->>>>>>> feature/user-registration
         </li>
       </form>
   <% }%>

@@ -2,13 +2,13 @@ var express = require("express");
 var app = express();
 var PORT = 8080; // default port 8080
 var cookieSession = require('cookie-session')
-const cookieParser = require("cookie-parser");
+//const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 app.use(cookieSession({
   name: 'session',
-  keys: [/* secret keys */]}))
+  keys: ['key1', 'key2']}))
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
+//app.use(cookieParser());
 app.set("view engine", "ejs");
 
 function generateRandomString(length) {
@@ -54,7 +54,7 @@ app.get("/list.json", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { user: users[req.cookies["user_id"]]};
+  let templateVars = { user: users[req.session.user_id]};
   res.render("urls_new", templateVars);
 });
 
@@ -65,13 +65,13 @@ app.get("/login", (req, res) => {
 app.get("/urls", (req, res) => {
   const keys = Object.keys(urlDatabase);
   const templateVars = {
-    user: users[req.cookies["user_id"]],
+    user: users[req.session.user_id],
     urls: urlDatabase,
     keys: keys
   };
   console.log(templateVars);
   console.log()
-  if(req.cookies.user_id){
+  if(req.session.user_id){
     res.render("urls_index", templateVars);
   }else{
     res.redirect("/login")
@@ -79,14 +79,14 @@ app.get("/urls", (req, res) => {
 });
 
 app.get("/urls/:shortURL", (req, res) => {
-let templateVars = { user: users[req.cookies["user_id"]],
+let templateVars = { user: users[req.session.user_id],
 shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
 console.log(templateVars);
 res.render("urls_show", templateVars);
 });
 
 app.get("/hello", (req, res) => {
-  let templateVars = { greeting: 'Hello World!', user: users[req.cookies["user_id"]]
+  let templateVars = { greeting: 'Hello World!', user: users[req.session["user_id"]]
  };
   res.render("hello_world", templateVars);
 });
@@ -113,7 +113,7 @@ app.post("/register", (req, res) => {
     res.status(400).send("User already exist, please login.");
   }
   users[userId] = {id: userId, email: email, password: password};
-  res.cookie('user_id', userId);
+  req.session.user_id = userId;
   console.log(users);
   console.log(emailList);
   res.redirect("/urls");
@@ -144,7 +144,7 @@ app.post("/login", (req, res) => {
     }
   }
   if(userPasswordMatch){
-      res.cookie('user_id', key);
+      req.session.user_id = key;
       res.redirect("/urls");
   }else{
       res.status(400).send("Please provide a valid email or/and password.");
@@ -152,7 +152,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('user_id');
+  req.session = null;
   res.redirect("/urls");
 });
 

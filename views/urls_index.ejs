@@ -17,9 +17,9 @@
     <button type="submit" class="btn btn-primary">Logout</button>
   </form>
 <br>
-  <% keys.forEach(function(key) { %>
+  <% Object.keys(urls).forEach(function(key) { %>
       <li>
-        <span><%= key %> - <%= urls[key] %></span>
+        <span><%= key %> - <%= urls[key].longURL %></span>
           <form method="POST" action="/urls/<%= key %>/delete">
               <a href="/urls/<%= key %>">Edit</a>
   <button type="delete" class="btn btn-primary">Delete</button>

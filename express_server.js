@@ -4,11 +4,12 @@ var PORT = 8080; // default port 8080
 var cookieSession = require('cookie-session')
 //const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
+app.use(bodyParser.urlencoded({extended: true}));
+//app.use(cookieParser());
 app.use(cookieSession({
   name: 'session',
   keys: ['key1', 'key2']}))
-app.use(bodyParser.urlencoded({extended: true}));
-//app.use(cookieParser());
 app.set("view engine", "ejs");
 
 function generateRandomString(length) {
@@ -21,9 +22,19 @@ function generateRandomString(length) {
    return result;
 }
 
-var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+function urlsForUser(userId) {
+  const ulrsSpecificUser = {};
+  for(var shortUrl in urlDatabase){
+    if(urlDatabase[shortUrl].userID === userId) {
+      ulrsSpecificUser[shortUrl] = urlDatabase[shortUrl];
+    }
+  }
+  return ulrsSpecificUser;
+}
+
+const urlDatabase = {
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
 const users = {
@@ -42,9 +53,14 @@ const users = {
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
+
 app.get("/u/:shortURL", (req, res) => {
-  res.redirect(urlDatabase[req.params.shortURL]);
+  if(urlDatabase[req.params.shortURL]) {
+  res.redirect("https://" + urlDatabase[req.params.shortURL].longURL);
+  }
+  res.send("Invalid URL");
 });
+
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
@@ -63,30 +79,35 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  const keys = Object.keys(urlDatabase);
   const templateVars = {
+    users,
     user: users[req.session.user_id],
-    urls: urlDatabase,
-    keys: keys
+    urls: urlsForUser(req.session.user_id)
   };
   console.log(templateVars);
-  console.log()
-  if(req.session.user_id){
+  if(users[req.session.user_id]){
     res.render("urls_index", templateVars);
   }else{
     res.redirect("/login")
   }
 });
 
-app.get("/urls/:shortURL", (req, res) => {
-let templateVars = { user: users[req.session.user_id],
-shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
-console.log(templateVars);
-res.render("urls_show", templateVars);
+app.get("/urls/:id", (req, res) => {
+  if(users[req.session.user_id].id !== urlDatabase[req.params.id].userID){
+    res.redirect("/urls")
+    return
+  }
+  let templateVars = {
+    user: users[req.session.user_id],
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id].longURL
+  };
+  console.log(templateVars);
+  res.render("urls_show", templateVars);
 });
 
 app.get("/hello", (req, res) => {
-  let templateVars = { greeting: 'Hello World!', user: users[req.session["user_id"]]
+  let templateVars = { greeting: 'Hello World!', user: users[req.session.user_id]
  };
   res.render("hello_world", templateVars);
 });
@@ -98,7 +119,7 @@ app.get("/register", (req, res) => {
 app.post("/register", (req, res) => {
   const userId = generateRandomString(6);
   const email = req.body.email;
-  const password = req.body.password;
+  const password = bcrypt.hashSync(req.body.password, 10);
 
   if( email === "" || password === ""){
     res.status(400).send("Please provide a valid email or password.");
@@ -120,13 +141,15 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
-  res.render("urls_index");
+  let short = req.params.shortURL;
+  urlDatabase[short].longURL = req.body.longURL;
+  res.redirect("/urls");
 });
 
 app.post("/urls", (req, res) => {
   let short = generateRandomString(6);
   let long = req.body.longURL;
-  urlDatabase[short] = long;
+  urlDatabase[short] = {longURL: long, userID: req.session.user_id};
   res.redirect("/urls");
 });
 app.post("/urls/:shortURL/delete", (req, res) => {
@@ -139,7 +162,7 @@ app.post("/login", (req, res) => {
   const password = req.body.password;
   let userPasswordMatch = false;
   for (var key in users) {
-    if (users[key].email === email && users[key].password === password) {
+    if (users[key].email === email && bcrypt.compareSync(password, users[key].password)) {
       userPasswordMatch = key
     }
   }

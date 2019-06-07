@@ -3,6 +3,7 @@ var app = express();
 var PORT = 8080; // default port 8080
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.set("view engine", "ejs");
@@ -48,9 +49,14 @@ const users = {
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
+
 app.get("/u/:shortURL", (req, res) => {
-  res.redirect(urlDatabase[req.params.shortURL]);
+  if(urlDatabase[req.params.shortURL]) {
+  res.redirect("https://" + urlDatabase[req.params.shortURL].longURL);
+  }
+  res.send("Invalid URL");
 });
+
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
@@ -67,8 +73,6 @@ app.get("/urls/new", (req, res) => {
 app.get("/login", (req, res) => {
   res.render("login");
 });
-
-
 
 app.get("/urls", (req, res) => {
   const templateVars = {
@@ -111,7 +115,7 @@ app.get("/register", (req, res) => {
 app.post("/register", (req, res) => {
   const userId = generateRandomString(6);
   const email = req.body.email;
-  const password = req.body.password;
+  const password = bcrypt.hashSync(req.body.password, 10);
 
   if( email === "" || password === ""){
     res.status(400).send("Please provide a valid email or password.");
@@ -154,7 +158,7 @@ app.post("/login", (req, res) => {
   const password = req.body.password;
   let userPasswordMatch = false;
   for (var key in users) {
-    if (users[key].email === email && users[key].password === password) {
+    if (users[key].email === email && bcrypt.compareSync(password, users[key].password)) {
       userPasswordMatch = key
     }
   }

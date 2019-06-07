@@ -6,26 +6,27 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
 <title>TinyApp</title>
 <body style="font-size:20px; padding:50px;">
   <h1>TinyApp</h1>
   <a href="/urls">URLs</a>
   |
   <a href="<%= '/urls/new' %>">Create new TinyUrl</a>
-  <b><p>Logged In As: <%= user.email%>!</p></b>
+  <b><p>Logged In As: <%= user.email %>!</p></b>
   <form method="POST" action="/logout">
     <button type="submit" class="btn btn-primary">Logout</button>
   </form>
 <br>
-  <% keys.forEach(function(key) { %>
-      <li>
-        <span><%= key %> - <%= urls[key] %></span>
-          <form method="POST" action="/urls/<%= key %>/delete">
-              <a href="/urls/<%= key %>">Edit</a>
-  <button type="delete" class="btn btn-primary">Delete</button>
-
+  <% for(shortUrl in urls){ %>
+    <li>
+      <span><%= shortUrl %> - <%= urls[shortUrl].longURL %></span>
+        <a href="/urls/<%= shortUrl %>">Edit</a>
+        <form method="POST" action="/urls/<%= shortUrl %>/delete">
+        <button type="delete" class="btn btn-primary">Delete</button>
         </li>
-  <% }); %>
+      </form>
+  <% }%>
 
 </body>
 </html>

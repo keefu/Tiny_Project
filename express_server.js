@@ -128,16 +128,13 @@ app.post("/register", (req, res) => {
   for (var key in users) {
     emailList.push(users[key].email);
   }
-  console.log(emailList);
 
   if(emailList.includes(email)) {
     res.status(400).send("User already exist, please login.");
-  }
+} else {  
   users[userId] = {id: userId, email: email, password: password};
   req.session.user_id = userId;
-  console.log(users);
-  console.log(emailList);
-  res.redirect("/urls");
+  res.redirect("/urls");}
 });
 
 app.post("/urls/:shortURL", (req, res) => {

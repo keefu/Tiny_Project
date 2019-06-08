@@ -1,6 +1,17 @@
-
-  <form method="POST" action="/login">
+<% if(typeof user !== "undefined") {%>
+  <h1>TinyApp</h1>
+  <a href="/urls">URLs</a>
+  |
+  <a href="<%= '/urls/new' %>">Create new TinyUrl</a>
+  <b><p>Logged In As: <%= user.email %>!</p></b>
+  <form method="POST" action="/logout">
+    <button type="submit" class="btn btn-primary">Logout</button>
+  </form>
+<% } else { %>
+<h1>TinyApp</h1>
+ <form method="POST" action="/login">
   <a href="/login">Login</a>
   |
   <a href="/register">Register</a>
   </form>
+<% }%>

@@ -11,17 +11,7 @@
   </head>
 
   <body style="font-size:20px; padding:50px;">
-    <body style="font-size:20px; padding:50px;">
-  <h1>TinyApp</h1>
-  <form method="POST" action="/urls/new">
-  <a href="/urls">URLs</a>
-  |
-  <a href="<%= '/urls/new' %>">Create new TinyUrl</a>
-  </form>
-    <b><p>Logged In As: <%= user.email%>!</p></b>
-    <form method="POST" action="/logout">
-      <button type="submit" class="btn btn-primary">Logout</button>
-    </form>
+    <% include partials/_header.ejs %>
     <h3>Create TinyURL</h3>
     <form class="form-inline" action="/urls" method="POST">
       <div class="form-group mb-2">

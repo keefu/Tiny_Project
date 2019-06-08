@@ -6,17 +6,9 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-
 <title>TinyApp</title>
 <body style="font-size:20px; padding:50px;">
-  <h1>TinyApp</h1>
-  <a href="/urls">URLs</a>
-  |
-  <a href="<%= '/urls/new' %>">Create new TinyUrl</a>
-  <b><p>Logged In As: <%= user.email %>!</p></b>
-  <form method="POST" action="/logout">
-    <button type="submit" class="btn btn-primary">Logout</button>
-  </form>
+<% include partials/_header.ejs %>
 <br>
   <% Object.keys(urls).forEach(function(key) { %>
       <li>
@@ -26,9 +18,7 @@
   <button type="delete" class="btn btn-primary">Delete</button>
 
         </li>
-      </form>
-  <% }%>
+  <% }); %>
 
 </body>
 </html>
-

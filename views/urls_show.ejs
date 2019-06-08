@@ -9,8 +9,8 @@
 <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
-<% include partials/_header.ejs %>
  <b><a href="<%= '/urls/new' %>">Create new TinyUrl</a></b>
+<% include partials/_header.ejs %>
   <h2><p>ShortURL: <%= shortURL %></p></h2>
     <form action="/urls/<%= shortURL %>" method="POST">
       <div class="form-group mb-2">

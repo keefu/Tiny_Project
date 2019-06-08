@@ -57,8 +57,9 @@ app.get("/", (req, res) => {
 app.get("/u/:shortURL", (req, res) => {
   if(urlDatabase[req.params.shortURL]) {
   res.redirect("https://" + urlDatabase[req.params.shortURL].longURL);
-  }
+  } else {
   res.send("Invalid URL");
+  }
 });
 
 app.get("/urls.json", (req, res) => {
@@ -80,10 +81,10 @@ app.get("/login", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const templateVars = {
-    users,
     user: users[req.session.user_id],
     urls: urlsForUser(req.session.user_id)
   };
+  console.log(users[req.session.user_id]);
   console.log(templateVars);
   if(users[req.session.user_id]){
     res.render("urls_index", templateVars);
@@ -134,6 +135,7 @@ app.post("/register", (req, res) => {
 } else {  
   users[userId] = {id: userId, email: email, password: password};
   req.session.user_id = userId;
+  console.log('At registration: ',userId)
   res.redirect("/urls");}
 });
 

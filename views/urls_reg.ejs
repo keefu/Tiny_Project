@@ -1,18 +1,27 @@
 <html>
-<title>Register-TinyApp</title>
+    <title>Register-TinyApp</title>
 </head>
- <% include partials/_header.ejs %>
-<body style="font-size:20px; padding:50px;">
-  <h2>Create Account</h2>
-  <form action="/register" method="POST">
-    <div class="form-group mb-2">
-      <p>Email: </p><input class="form-control" type="email" name="email" placeholder="Email" style="width: 300px; margin: 1em">
-      <p>Password :</p><input class="form-control" type="password" name="password" placeholder="Password" style="width: 300px; margin: 1em">
-      <button type="submit" class="btn btn-primary">Register</button>
-    </div>
-  </form>
+<% include partials/_header.ejs %>
+    <body style="font-size:20px; padding:50px;">
+        <h2>Create Account</h2>
+        <form action="/register" method="POST">
+            <div class="form-group mb-2">
+                <p>Email:
+                </p><input
+                    class="form-control"
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    style="width: 300px; margin: 1em">
+                <p>Password :</p><input
+                    class="form-control"
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    style="width: 300px; margin: 1em">
+                <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+        </form>
 
-</body>
+    </body>
 </html>
-
-

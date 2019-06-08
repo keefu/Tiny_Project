@@ -93,8 +93,6 @@ app.get("/urls", (req, res) => {
         user: users[req.session.user_id],
         urls: urlsForUser(req.session.user_id)
     };
-    console.log(users[req.session.user_id]);
-    console.log(templateVars);
     if (users[req.session.user_id]) {
         res.render("urls_index", templateVars);
     } else {
@@ -113,7 +111,6 @@ app.get("/urls/:id", (req, res) => {
         shortURL: req.params.id,
         longURL: urlDatabase[req.params.id].longURL
     };
-    console.log(templateVars);
     res.render("urls_show", templateVars);
 });
 
@@ -143,8 +140,6 @@ app.post("/register", (req, res) => {
     const emailList = [];
     for (var key in users) {
         emailList.push(users[key].email);
-        console.log('Email List:', emailList)
-        console.log('Key :', key)
     }
 
     if (emailList.includes(email)) {
@@ -158,7 +153,6 @@ app.post("/register", (req, res) => {
             password: password
         };
         req.session.user_id = userId;
-        console.log('At registration: ', userId)
         res.redirect("/urls");
     }
 });

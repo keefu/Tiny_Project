@@ -173,7 +173,6 @@ app.post("/urls/:id/delete", (req, res) => {
     delete users[req.session.user_id].id;
     res.redirect("/urls");
 });
-
 //Login page with no empty entry and error message to no matching field.
 app.post("/login", (req, res) => {
     const email = req.body.email;

@@ -24,9 +24,12 @@
                         <form method="POST" action="/urls/<%= key %>/delete">
                             <a href="/urls/<%= key %>">Edit</a>
                             <button type="delete" class="btn btn-primary">Delete</button>
+                            <br>
+                            <a href="http://localhost:8080/u/<%= key %>">http://localhost:8080/u/<%= key %></a>
+                        </form>
+                    </span>
+                </li>
+                <% }); %>
 
-                        </li>
-                        <% }); %>
-
-                        </body>
-                    </html>
+                </body>
+            </html>

@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
     name: 'session',
     keys: ['key1', 'key2']
-}))
+}));
 app.set("view engine", "ejs");
 
 function generateRandomString(length) {
@@ -22,7 +22,7 @@ function generateRandomString(length) {
     }
     return result;
 }
-
+//Construct a function to create new object
 function urlsForUser(userId) {
     const ulrsSpecificUser = {};
     for (var shortUrl in urlDatabase) {
@@ -33,32 +33,12 @@ function urlsForUser(userId) {
     return ulrsSpecificUser;
 }
 
-const urlDatabase = {
-    b6UTxQ: {
-        longURL: "https://www.tsn.ca",
-        userID: "aJ48lW"
-    },
-    i3BoGr: {
-        longURL: "https://www.google.ca",
-        userID: "aJ48lW"
-    }
-};
+const urlDatabase = {};
 
-const users = {
-    "userRandomID": {
-        id: "userRandomID",
-        email: "user@example.com",
-        password: "purple-monkey-dinosaur"
-    },
-    "user2RandomID": {
-        id: "user2RandomID",
-        email: "user2@example.com",
-        password: "dishwasher-funk"
-    }
-}
+const users = {};
 
 app.get("/", (req, res) => {
-    res.send("Hello!");
+    res.redirect("/urls");
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -78,16 +58,22 @@ app.get("/list.json", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
+    if ( users[req.session.user_id]) {    
     let templateVars = {
         user: users[req.session.user_id]
     };
     res.render("urls_new", templateVars);
+    } else { 
+        return res
+        .status(401)
+        .send("You need to login first.")
+    }
 });
 
 app.get("/login", (req, res) => {
     res.render("login");
 });
-
+//Set up user_id for further access 
 app.get("/urls", (req, res) => {
     const templateVars = {
         user: users[req.session.user_id],
@@ -99,8 +85,13 @@ app.get("/urls", (req, res) => {
         res.redirect("/login")
     }
 });
-
+//Condition to having an user_id before continuing
 app.get("/urls/:id", (req, res) => {
+    if ( users[req.session.user_id] === undefined) {
+        return res
+            .status(401)
+            .send("You need to login first.")
+    }
     if (users[req.session.user_id].id !== urlDatabase[req.params.id].userID) {
         return res
             .status(401)
@@ -113,7 +104,7 @@ app.get("/urls/:id", (req, res) => {
     };
     res.render("urls_show", templateVars);
 });
-
+//Testing 
 app.get("/hello", (req, res) => {
     let templateVars = {
         greeting: 'Hello World!',
@@ -125,7 +116,7 @@ app.get("/hello", (req, res) => {
 app.get("/register", (req, res) => {
     res.render("urls_reg");
 });
-
+//Registration page with multiple conditions as to having no empty password/email or to already existing email.
 app.post("/register", (req, res) => {
     const userId = generateRandomString(6);
     const email = req.body.email;
@@ -172,16 +163,18 @@ app.post("/urls", (req, res) => {
     };
     res.redirect("/urls");
 });
+
 app.post("/urls/:shortURL/delete", (req, res) => {
     delete urlDatabase[req.params.shortURL];
     res.redirect("/urls");
-})
+});
 
 app.post("/urls/:id/delete", (req, res) => {
     delete users[req.session.user_id].id;
     res.redirect("/urls");
-})
+});
 
+//Login page with no empty entry and error message to no matching field.
 app.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
